@@ -32,7 +32,7 @@ class FirebaseAuthRepo implements AuthRepo {
   }
 
   @override
-  Future<AppUser?> getCurrentUser() async{
+  Future<AppUser?> getCurrentUser() async {
     // get current user from firebase
     final firebaseUser = firebaseAuth.currentUser;
     // no logged in user
@@ -60,9 +60,8 @@ class FirebaseAuthRepo implements AuthRepo {
   }
 
   @override
-  Future<void> logout() {
-    // TODO: implement logout
-    throw UnimplementedError();
+  Future<void> logout() async {
+    await firebaseAuth.signOut();
   }
 
   @override
@@ -88,8 +87,12 @@ class FirebaseAuthRepo implements AuthRepo {
   }
 
   @override
-  Future<String> sendPasswordResetEmail(String email) {
-    // TODO: implement sendPasswordResetEmail
-    throw UnimplementedError();
+  Future<String> sendPasswordResetEmail(String email) async {
+    try {
+      await firebaseAuth.sendPasswordResetEmail(email: email);
+      return "Password reset email! check your inbox (or spam if not present in inbox)";
+    } catch (e) {
+      return "An error occured: $e";
+    }
   }
 }
